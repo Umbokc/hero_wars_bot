@@ -22,23 +22,23 @@ state = None
 mouse = Mouse()
 
 class ImgParts:
-  in_fight = get_image(file='../items/in_fight.png', crop=False)
-  go_fight = get_image(file='../items/go_fight.png', crop=False)
-  mop_up = get_image(file='../items/mop_up.png', crop=False)
-  auto = get_image(file='../items/auto.png', crop=False)
-  done_fight = get_image(file='../items/done_fight.png', crop=False)
-  right_skull = get_image(file='../items/right_skull.png', crop=False)
-  left_skull = get_image(file='../items/left_skull.png', crop=False)
+  in_fight = get_image(file='./images/parts/in_fight.png', crop=False)
+  go_fight = get_image(file='./images/parts/go_fight.png', crop=False)
+  mop_up = get_image(file='./images/parts/mop_up.png', crop=False)
+  auto = get_image(file='./images/parts/auto.png', crop=False)
+  done_fight = get_image(file='./images/parts/done_fight.png', crop=False)
+  right_skull = get_image(file='./images/parts/right_skull.png', crop=False)
+  left_skull = get_image(file='./images/parts/left_skull.png', crop=False)
 
-  sword = get_image(file='../items/sword.png', crop=False)
-  shield = get_image(file='../items/shield.png', crop=False)
-  protect = get_image(file='../items/protect.png', crop=False)
+  sword = get_image(file='./images/parts/sword.png', crop=False)
+  shield = get_image(file='./images/parts/shield.png', crop=False)
+  protect = get_image(file='./images/parts/protect.png', crop=False)
 
-  btn_skull = get_image(file='../items/skull.png', crop=False)
-  have_not_skulls = get_image(file='../items/have_not_skulls.png', crop=False)
-  box = get_image(file='../items/box.png', crop=False)
-  box2 = get_image(file='../items/box2.png', crop=False)
-  skill_open = get_image(file='../items/skill_open.png', crop=False)
+  btn_skull = get_image(file='./images/parts/skull.png', crop=False)
+  have_not_skulls = get_image(file='./images/parts/have_not_skulls.png', crop=False)
+  box = get_image(file='./images/parts/box.png', crop=False)
+  box2 = get_image(file='./images/parts/box2.png', crop=False)
+  skill_open = get_image(file='./images/parts/skill_open.png', crop=False)
 
 
 def one_action(cords):
