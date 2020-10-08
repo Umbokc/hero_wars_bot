@@ -1,8 +1,4 @@
-from screen import (get_image, has_img_in_img, ImgParts)
-
-
-
-def all_tests():
+class TestTower:
   mathces = (
     ('b_screen', 'box', True),
     ('b_screen2', 'box', False),
@@ -34,24 +30,3 @@ def all_tests():
     ('s_screen_done', 'not_enough_skulls', False),
     ('s_screen_open', 'not_enough_skulls', False),
   )
-
-  print('Screen, elem: waited/got, (x, y)')
-  for item in mathces:
-    elem = getattr(ImgParts, item[1])
-    screen = get_image(file='./screens/%s.png' % item[0])
-
-    coords = (0, 0)
-    get_pos = has_img_in_img(elem, screen, True)
-    if get_pos != False:
-      coords = get_pos
-    get_pos = get_pos != False
-
-    params = item + (get_pos, ) + coords
-    params += (get_pos == item[2],)
-    print('%s, %s: %d/%d, (%d, %d) => %r' % params)
-
-def main():
-  all_tests()
-
-if __name__ == '__main__':
-  main()

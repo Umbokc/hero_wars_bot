@@ -1,21 +1,14 @@
 """
-
+Tower
 """
 import time
 import numpy as np
 
-import settings
-from screen import (
-  get_screen,
-  get_elem_image,
-  findMiddle,
-  has_img_in_img,
-  ImgParts
-)
+from core.screen import Screen
+from core.helper import findMiddle
+import core.mouse as ms
 
-import mouse as ms
-
-class Bot:
+class Tower:
   running = True
   screen = None
   state = None
@@ -27,11 +20,13 @@ class Bot:
     s_proceed = (90, -50)
 
   def __init__(self):
+    self.cl_screen = Screen('tower')
+
     while self.running:
       self.processing()
 
   def set_screen(self):
-    self.screen = get_screen()
+    self.screen = self.cl_screen.set_screen()
 
   def fix_coords(self, key, coords):
     if hasattr(self.FixCoords, key):
@@ -49,8 +44,8 @@ class Bot:
     return False
 
   def check_part(self, key_part):
-    part = getattr(ImgParts, key_part)
-    get_coord = has_img_in_img(part, self.screen, True)
+    part = self.cl_screen.get_part(key_part)
+    get_coord = self.cl_screen.has_img_in_img(part, self.screen, True)
 
     if get_coord != False:
       fixed_coords = self.fix_coords(key_part, get_coord)
@@ -84,7 +79,7 @@ class Bot:
     btns = []
     sensity = 70
 
-    btns_all_coords = has_img_in_img(ImgParts.s_skull_btn, self.screen, get_all_coords=True)
+    btns_all_coords = self.cl_screen.has_img_in_img(self.cl_screen.get_part('s_skull_btn'), self.screen, get_all_coords=True)
 
     if btns_all_coords == False:
       return []
@@ -96,9 +91,9 @@ class Bot:
     btns.append({'x':x, 'y': findMiddle(y_itms) })
     btns.append({'x':x, 'y':y_itms[-1]})
 
-    skills.append(has_img_in_img(ImgParts.s_shield, self.screen, get_all_coords=True))
-    skills.append(has_img_in_img(ImgParts.s_sword, self.screen, get_all_coords=True))
-    skills.append(has_img_in_img(ImgParts.s_protect, self.screen, get_all_coords=True))
+    skills.append(self.cl_screen.has_img_in_img(self.cl_screen.get_part('s_shield'), self.screen, get_all_coords=True))
+    skills.append(self.cl_screen.has_img_in_img(self.cl_screen.get_part('s_sword'), self.screen, get_all_coords=True))
+    skills.append(self.cl_screen.has_img_in_img(self.cl_screen.get_part('s_protect'), self.screen, get_all_coords=True))
 
     for btn in btns:
       for s in skills:
@@ -171,6 +166,8 @@ class Bot:
     f_skip_coord = self.check_part('f_skip')
     if f_skip_coord:
       self.one_touch(f_skip_coord)
+      self.state = None
+      time.sleep(3)
 
     f_attack_coord = self.check_part('f_attack')
     if f_attack_coord:
@@ -200,9 +197,3 @@ class Bot:
     self.one_touch(self.check_part('s_proceed'))
     self.state = None
     time.sleep(3)
-
-def main():
-  Bot()
-
-if __name__ == '__main__':
-  main()
