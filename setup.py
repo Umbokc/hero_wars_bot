@@ -43,6 +43,14 @@ if sys.argv[1] == 'tower':
 
 if sys.argv[1] == 'outland':
   print('Run outland')
-  outland.Outland()
+
+  param = None
+  if len(sys.argv) > 2:
+    param = tuple(map(lambda x: int(x), sys.argv[2].split(' ')))
+    if len(param) != 3:
+      param = None
+
+  outland.Outland(param)
+
   print('Done')
 

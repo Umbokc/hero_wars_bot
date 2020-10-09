@@ -21,8 +21,12 @@ class Outland(Bot):
     'is_done': False
   })
 
-  def __init__(self):
-    super().__init__('outland')
+  def __init__(self, pattern=None):
+    if pattern != None:
+      self.master.pattern = pattern
+
+    print(self.master.pattern)
+    # super().__init__('outland')
 
   def one_in_few_action(self, state, key_part, count=2, act_index=0):
 
@@ -83,16 +87,19 @@ class Outland(Bot):
   def process_master(self):
     ind = self.master.index
 
-    if self.state == 'master':
-
-      if ind > 2:
-        print('Done here')
-        self.modal_close(None)
-        self.master.index = 2
-
+    if ind <= 2:
       if self.master.pattern[ind] == self.master.done[ind]:
         self.master.index += 1
-        ind = self.master.index
+        self.modal_close('master')
+        return
+
+    if self.state == 'master':
+      if ind > 2:
+        print('Done here')
+        self.master.is_done = True
+        self.master.index = 0
+        self.global_state = None
+        self.modal_close(None)
         return
 
       print('Curr inex', self.master.index)
