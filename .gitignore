@@ -147,5 +147,5 @@ cython_debug/
 ehthumbs.db
 Thumbs.db
 
-/data/screens/
+# /data/screens/
 get_screen.sh
