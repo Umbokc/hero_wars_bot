@@ -15,6 +15,7 @@ class Bot:
   touch_sleep = 0.25
   no_coords_try = 5
   no_coords_tried = 0
+  no_coords_tried_state = ''
 
   curr_type = None
   cl_screen = None
@@ -52,12 +53,21 @@ class Bot:
   def one_touch(self, cords):
 
     if cords == False:
+
       if self.no_coords_tried >= self.no_coords_try:
         print('Reset', self.state)
         self.state = None
         self.no_coords_tried = 0
+        self.no_coords_tried_state = ''
         return False
-      self.no_coords_tried += 1
+
+      if self.state == self.no_coords_tried_state:
+        self.no_coords_tried += 1
+      else:
+        self.no_coords_tried = 0
+
+      self.no_coords_tried_state = self.state
+
       print('No coords to click. ', self.state)
       return False
 
