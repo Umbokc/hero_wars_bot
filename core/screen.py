@@ -4,40 +4,10 @@ import cv2
 import numpy as np
 
 from .settings import ELEMENTS_DIR, SCREENS_DIR, LOCALE, ROWS, COLS
-from .helper import findMiddle
-
-class ElemNames:
-  common = (
-    ('f_auto', True),
-    ('f_to_battle', True),
-  )
-
-  tower = (
-    ('modal_close',),
-    ('f_door',),
-    ('f_skip', True),
-    ('f_attack', True),
-    ('f_done_ok', True),
-    ('box',),
-    ('box2',),
-    ('b_box_open', True),
-    ('b_to_next', True),
-    ('skill_totem',),
-    ('not_enough_skulls', True),
-    ('s_skull_btn',),
-    ('s_shield',),
-    ('s_sword',),
-    ('s_protect',),
-    ('s_proceed', True),
-  )
-
-  outland = (
-    ('main_open', True),
-  )
+from .helper import findMiddle, file_exist
 
 class Screen:
   img_parts = {
-    'common': {},
     'tower': {},
     'outland': {},
   }
@@ -45,9 +15,6 @@ class Screen:
   def __init__(self, curr_type, load=True, show_logs=False):
     self.curr_type = curr_type
     self.show_logs = show_logs
-
-    if load:
-      self.load_all_elems()
 
   def set_screen(self, to_cv=True):
     pipe = subprocess.Popen("adb exec-out screencap ", stdout=subprocess.PIPE, shell=True)
@@ -104,43 +71,45 @@ class Screen:
     return False
 
   def get_part(self, key_part):
-    the_type = self.curr_type
+    if key_part not in self.img_parts[self.curr_type]:
+      self.load_elem(key_part)
 
-    if key_part in self.img_parts['common']:
-      the_type = 'common'
-
-    return self.img_parts[the_type][key_part]
+    return self.img_parts[self.curr_type][key_part]
 
 
-  def load_all_elems(self):
-    self.load_elems('common')
-    self.load_elems(self.curr_type)
+  def load_elem(self, key_part):
+    options = (
+      (True, 'common'),
+      (False, 'common'),
+      (True, self.curr_type),
+      (False, self.curr_type),
+    )
 
-  def load_elems(self, the_type):
-    elems = getattr(ElemNames, the_type)
+    res = False
+    for opt in options:
+      res = self.load_elem_image(key_part, by_locale=opt[0], the_type=opt[1])
+      if res.size != 0:
+        break
 
-    if len(elems) == 0:
-      self.print('No elements %s.' % the_type)
-      return
+    if res.size == 0:
+      raise Exception('Cant find part "%s"' % key_part)
 
-    for elem in elems:
-      self.img_parts[self.curr_type][elem[0]] = self.load_elem_image(*elem, the_type=the_type)
-
-    self.print('Elements %s loaded.' % the_type)
+    self.img_parts[self.curr_type][key_part] = res
 
   def load_elem_image(self, name, by_locale=False, the_type=None):
     el_dir = ELEMENTS_DIR + '/'
-
-    if the_type:
-      el_dir += the_type + '/'
-    else:
-      el_dir += self.curr_type + '/'
+    el_dir += (the_type if the_type else self.curr_type) + '/'
 
     if by_locale:
       el_dir += LOCALE + '/'
 
-    im = self.get_image(el_dir + name + '.png')
-    return im
+    file_path = el_dir + name + '.png'
+
+    # print('Try image %s' % file_path)
+    if file_exist(file_path):
+      return self.get_image(file_path)
+
+    return np.array([])
 
   def raw_to_im(self, bytes):
     im = Image.frombuffer('RGBA', (COLS, ROWS), bytes[12:], 'raw', 'RGBA', 0, 1)
