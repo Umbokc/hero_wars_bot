@@ -1,5 +1,11 @@
 import os.path
 from os import path
+import numpy as np
+
+class AttrDict(dict):
+  def __init__(self, *args, **kwargs):
+    super(AttrDict, self).__init__(*args, **kwargs)
+    self.__dict__ = self
 
 def findMiddle(input_list):
   middle = float(len(input_list))/2
@@ -25,3 +31,13 @@ def has_intersection(lst, item, sensity=0):
     return True
 
   return False
+
+def chunks(l, n):
+  res = np.array_split(l,n)
+  new_array = []
+
+  for x in res:
+    if len(x):
+      new_array.append(x[0])
+
+  return new_array

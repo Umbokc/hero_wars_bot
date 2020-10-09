@@ -15,6 +15,7 @@ class TestTower:
     ('f_screen_skip', 'f_skip', True),
 
     ('s_screen', 'skill_totem', True),
+    ('s_screen2', 'skill_totem_2', True),
     ('s_screen_open', 's_shield', True),
     ('s_screen_open', 's_sword', True),
     ('s_screen_open', 's_skull_btn', True),

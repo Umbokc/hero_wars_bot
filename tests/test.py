@@ -45,6 +45,19 @@ def test_tower():
   from .test_tower import TestTower
   run_tests(TestTower.mathces, 'tower')
 
+def test_tower_s_btns():
+  from scripts.tower import Tower
+  print("\nTower tests s_btns: ")
+  t = Tower(run=False)
+  t.curr_screen = t.cl_screen.get_image(t.cl_screen.get_screen_path('s_screen_open'))
+  # t.curr_screen = t.cl_screen.get_image(t.cl_screen.get_screen_path('s_screen_open2'))
+  items = t.get_skill_options()
+
+  btns = t.get_few_opts(key_part='s_skull_btn', count=3)
+  print('btns:', btns)
+
+  print('Skill btns:', items)
+
 def test_outland():
   print("\nTower tests: ")
   from .test_outland import TestOutland
